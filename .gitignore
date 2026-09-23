@@ -3,6 +3,7 @@ odoo-db-data/*
 .env
 docker-compose.override.yml
 *.pyc
+.venv/
 .vscode/
 README.md
 env-sample

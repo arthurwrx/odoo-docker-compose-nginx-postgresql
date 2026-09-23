@@ -2,18 +2,24 @@ version: '3'
 services:
     odoo:
         container_name: odoo
-        image: odoo:latest
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
         restart: always
         volumes:
+            - ./odoo-source:/opt/odoo:rw
             - ./addons:/mnt/extra-addons/:rw
             - ./config/odoo:/etc/odoo/:rw
             - ./odoo-web-data:/var/lib/odoo/:rw
         ports:
             - "8069:8069"
+            - "5678:5678"
         depends_on:
             - "db"
         networks:
           - odoo_network
+        environment:
+            - ODOO_DEBUG=1
     nginx:
         container_name: nginx
         image: nginx:latest
@@ -41,7 +47,7 @@ services:
           - odoo_network
 
     db:
-      image: postgres:13
+      image: postgres:18
       restart: always
       container_name: postgresql
       environment:
